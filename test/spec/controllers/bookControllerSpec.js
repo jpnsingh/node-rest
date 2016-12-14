@@ -31,7 +31,7 @@
 
                 response.status.calledWith(400).should.equal(true, 'Bad Status', response.status.args[0][0]);
 
-                response.send.calledWith('Title is required').should.equal(true);
+                response.send.calledWith('Book name is required').should.equal(true);
             });
         });
     });

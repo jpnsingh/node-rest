@@ -7,7 +7,13 @@
         app = express(),
         port = process.env.PORT || 8090;
 
-    var db = mongoose.connect('mongodb://localhost:27017/bookApi');
+    var db;
+
+    if (process.env.ENV === 'Test') {
+        db = mongoose.connect('mongodb://localhost:27017/bookApiTest');
+    } else {
+        db = mongoose.connect('mongodb://localhost:27017/bookApi');
+    }
 
     app.use(bodyParser.urlencoded({extended: true}));
     app.use(bodyParser.json());
@@ -22,4 +28,6 @@
     app.listen(port, function () {
         console.log('Server running on %s', port);
     });
+
+    module.exports = app;
 })();

@@ -37,9 +37,9 @@
         function post(request, response) {
             var book = new Book(request.body);
 
-            if (!request.body.title) {
+            if (!request.body.name) {
                 response.status(400);
-                response.send('Title is required');
+                response.send('Book name is required');
             }
             book.save();
             response.status(201);
