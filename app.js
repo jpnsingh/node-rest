@@ -28,6 +28,16 @@
             });
         });
 
+    bookRouter
+        .route('/books/:bookId')
+        .get(function (request, response) {
+            Book.findById(request.params.bookId, function (error, book) {
+                assert.equal(null, error);
+
+                response.json(book);
+            });
+        });
+
     app.use('/api', bookRouter);
 
     app.get('/', function (request, response) {
