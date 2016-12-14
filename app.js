@@ -3,6 +3,7 @@
 
     var express = require('express'),
         mongoose = require('mongoose'),
+        bodyParser = require('body-parser'),
         assert = require('assert'),
         app = express(),
         port = process.env.PORT || 8090;
@@ -10,10 +11,25 @@
     var db = mongoose.connect('mongodb://localhost:27017/bookApi');
     var Book = require('./models/bookModel');
 
+    app.use(bodyParser.urlencoded({extended: true}));
+    app.use(bodyParser.json());
+
     var bookRouter = express.Router();
 
     bookRouter
         .route('/books')
+        .post(function (request, response) {
+            var book = new Book(request.body);
+
+            console.log(book);
+
+            book.save();
+
+            response
+                .status(201)
+                .send(book);
+
+        })
         .get(function (request, response) {
             var query = {};
 
@@ -29,7 +45,7 @@
         });
 
     bookRouter
-        .route('/books/:bookId')
+        .route('/book/:bookId')
         .get(function (request, response) {
             Book.findById(request.params.bookId, function (error, book) {
                 assert.equal(null, error);
