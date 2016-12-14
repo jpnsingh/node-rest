@@ -40,8 +40,14 @@
                 Book.findById(request.params.bookId, function (error, book) {
                     assert.equal(null, error);
 
-                    request.book = book;
-                    next();
+                    if (!book) {
+                        response
+                            .status(404)
+                            .send('No book found for the given _id');
+                    } else {
+                        request.book = book;
+                        next();
+                    }
                 });
             });
 
@@ -72,6 +78,11 @@
                 request.book.save();
 
                 response.json(request.book);
+            })
+            .delete(function (request, response) {
+                request.book.remove();
+
+                response.status(204).send('Removed');
             });
 
         return bookRouter;
