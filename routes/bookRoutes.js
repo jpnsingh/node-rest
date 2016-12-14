@@ -5,9 +5,9 @@
         assert = require('assert'),
         Book = require('../models/bookModel');
 
-    module.exports = Routes;
+    module.exports = bookRoutes;
 
-    function Routes() {
+    function bookRoutes() {
         var bookRouter = express.Router();
 
         bookRouter
