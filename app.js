@@ -15,9 +15,13 @@
     bookRouter
         .route('/books')
         .get(function (request, response) {
-            // var responseJson = {hello: 'This is my book API'};
+            var query = {};
 
-            Book.find(function (error, books) {
+            if (request.query.genre) {
+                query.genre = request.query.genre;
+            }
+
+            Book.find(query, function (error, books) {
                 assert.equal(null, error);
 
                 response.json(books);
