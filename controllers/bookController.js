@@ -36,12 +36,14 @@
 
         function post(request, response) {
             var book = new Book(request.body);
+
+            if (!request.body.title) {
+                response.status(400);
+                response.send('Title is required');
+            }
             book.save();
-
-            response
-                .status(201)
-                .send(book);
-
+            response.status(201);
+            response.send(book);
         }
 
         function put(request, response) {
@@ -72,7 +74,8 @@
         function remove(request, response) {
             request.book.remove();
 
-            response.status(204).send('Removed');
+            response.status(204);
+            response.send('Removed');
         }
 
         function middleware(request, response, next) {
@@ -80,9 +83,8 @@
                 assert.equal(null, error);
 
                 if (!book) {
-                    response
-                        .status(404)
-                        .send('No book found for the given _id');
+                    response.status(404);
+                    response.send('No book found for the given _id');
                 } else {
                     request.book = book;
                     next();
