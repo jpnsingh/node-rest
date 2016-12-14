@@ -36,27 +36,42 @@
             });
 
         bookRouter
+            .use('/:bookId', function (request, response, next) {
+                Book.findById(request.params.bookId, function (error, book) {
+                    assert.equal(null, error);
+
+                    request.book = book;
+                    next();
+                });
+            });
+
+        bookRouter
             .route('/:bookId')
             .get(function (request, response) {
-                Book.findById(request.params.bookId, function (error, book) {
-                    assert.equal(null, error);
-
-                    response.json(book);
-                });
+                response.json(request.book);
             })
             .put(function (request, response) {
-                Book.findById(request.params.bookId, function (error, book) {
-                    assert.equal(null, error);
+                request.book.name = request.body.name;
+                request.book.author = request.body.author;
+                request.book.genre = request.body.genre;
+                request.book.read = request.body.read;
 
-                    book.name = request.body.name;
-                    book.author = request.body.author;
-                    book.genre = request.body.genre;
-                    book.read = request.body.read;
+                request.book.save();
 
-                    book.save();
+                response.json(request.book);
+            })
+            .patch(function (request, response) {
+                if (request.body._id) {
+                    delete request.body._id;
+                }
 
-                    response.json(book);
-                });
+                for (var key in request.body) {
+                    request.book[key] = request.body[key];
+                }
+
+                request.book.save();
+
+                response.json(request.book);
             });
 
         return bookRouter;
