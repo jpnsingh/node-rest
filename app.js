@@ -13,7 +13,7 @@
     app.use(bodyParser.json());
 
     app.use('/api/books', require('./routes/bookRoutes')());
-    app.use('/api/authors', require('./routes/bookRoutes')());
+    app.use('/api/authors', require('./routes/authorRoutes')());
 
     app.get('/', function (request, response) {
         response.send('Welcome to my API!!');

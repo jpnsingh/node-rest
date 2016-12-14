@@ -14,9 +14,6 @@
             .route('/')
             .post(function (request, response) {
                 var book = new Book(request.body);
-
-                console.log(book);
-
                 book.save();
 
                 response
@@ -43,6 +40,20 @@
             .get(function (request, response) {
                 Book.findById(request.params.bookId, function (error, book) {
                     assert.equal(null, error);
+
+                    response.json(book);
+                });
+            })
+            .put(function (request, response) {
+                Book.findById(request.params.bookId, function (error, book) {
+                    assert.equal(null, error);
+
+                    book.name = request.body.name;
+                    book.author = request.body.author;
+                    book.genre = request.body.genre;
+                    book.read = request.body.read;
+
+                    book.save();
 
                     response.json(book);
                 });
